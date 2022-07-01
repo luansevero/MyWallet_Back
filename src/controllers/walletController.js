@@ -24,4 +24,4 @@ async function updateCostumerCurrency(req, res){
 
 
 
-export { updateCostumer }
+export { costumerWallet, updateCostumerCurrency }
