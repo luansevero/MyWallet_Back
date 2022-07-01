@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import { db } from '../setup/db.js';
-import { signInSchema, signUpSchema} from '../schemas/authSchemas.js'
+
 
 async function signUp(req, res){
-    const costumer = req.body;
+    const costumer = req.body
     const { email } = req.body
 
     try{
@@ -26,16 +26,17 @@ async function signUp(req, res){
 }
 
 async function signIn(req, res){
+    const { email, password } = req.body;
     try{
         const costumer = await db.collection('costumers').findOne({ email });
     
-        if(!costumer || !bcrypt.compareSync(password, user.password)){
+        if(!costumer || !bcrypt.compareSync(password, costumer.password)){
             res.sendStatus(401);
         }
 
         const token = uuid();
 
-        await db.collection('sessions').insertOne({ token, userId: user._id });
+        await db.collection('sessions').insertOne({ token, userId: ObjectId(costumer._id) });
 
         res.send(token);
     } catch(erro){
