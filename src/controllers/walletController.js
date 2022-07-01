@@ -1,8 +1,20 @@
 import db from '../setup/db.js';
 
 async function costumerWallet(req, res){
-    
-    
+    const costumer = res.locals;
+
+    await db.collection('wallet').findOne({})
+
+
+
+    /*      
+        {
+            _id: "",
+            token: "",
+            transaction:[
+            ]
+        }
+    */
 
     
 

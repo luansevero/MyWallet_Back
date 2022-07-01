@@ -10,8 +10,6 @@ async function tokenValidationMiddleware(req,res,next){
     const costumer = await db.collection('costumers').findOne({ _id: session.userId });
     if (!costumer) {return res.sendStatus(401);}
 
-    delete costumer.password;
-
     res.locals.costumer;
     next();
 }

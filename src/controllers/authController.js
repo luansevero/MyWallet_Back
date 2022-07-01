@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import { db } from '../setup/db.js';
+import { db, ObjectId } from '../setup/db.js';
 
 
 async function signUp(req, res){
@@ -12,11 +12,18 @@ async function signUp(req, res){
         if(haveAlready){
             return res.status(406).send('Email já em uso!');
         }
-
         const passwordHash = bcrypt.hashSync(costumer.password, 10);
-
         await db.collection('costumers').insertOne({...costumer, password: passwordHash})
+        console.log('Usuario cadastrado com sucesso')
 
+        const costumer = await db.collection('costumers').findOne({ email });
+        await db.collection('wallets').insertOne({
+            _id: ObjectId(costumer._id),
+            token: "",
+            transaction:[
+            ]
+        })
+        console.log('Carteira criada com sucesso')
 
         return res.sendStatus(201);
     } catch(error){
@@ -26,22 +33,9 @@ async function signUp(req, res){
 }
 
 async function signIn(req, res){
-    const { email, password } = req.body;
-    try{
-        const costumer = await db.collection('costumers').findOne({ email });
-    
-        if(!costumer || !bcrypt.compareSync(password, costumer.password)){
-            res.sendStatus(401);
-        }
+    const { token } = res.locals;
 
-        const token = uuid();
-
-        await db.collection('sessions').insertOne({ token, userId: ObjectId(costumer._id) });
-
-        res.send(token);
-    } catch(erro){
-        res.sendStatus(401);
-    }
+    res.send(token)
 }
 
 
