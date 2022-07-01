@@ -1,21 +1,15 @@
 import express, {json} from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import router from './routes/routes.js'
 
 dotenv.config();
 
-import { signIn, signUp } from './controllers/authController.js';
 
 const server = express();
 server.use(cors());
 server.use(json());
+server.use(router);
 
-/*SIgnIn, SignUp Route*/
-server.post('/login', signIn);
-server.post('/register', signUp);
-
-/*Wallet Route*/
-
-server.listen(process.env.PORT, () =>{
-    console.log('Server listening on 5000')
-})
+const PORT = process.env.PORT
+server.listen(PORT, () =>{console.log(`Server listening on ${PORT}`)})

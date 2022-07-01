@@ -1,16 +1,11 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import db from '../setup/db.js';
-import joi from 'joi';
-
-import { signInSchema, signUpSchema} from '../setup/joiValidations.js'
+import { db } from '../setup/db.js';
+import { signInSchema, signUpSchema} from '../schemas/authSchemas.js'
 
 async function signUp(req, res){
     const costumer = req.body;
     const { email } = req.body
-
-    const validation = signUpSchema.validate(costumer);
-    if(validation.error){return res.sendStatus(400)};  
 
     try{
         const haveAlready = await db.collection('costumers').findOne({email});
@@ -22,6 +17,7 @@ async function signUp(req, res){
 
         await db.collection('costumers').insertOne({...costumer, password: passwordHash})
 
+
         return res.sendStatus(201);
     } catch(error){
         return res.sendStatus(500);
@@ -30,10 +26,6 @@ async function signUp(req, res){
 }
 
 async function signIn(req, res){
-    const {email, password} = req.body;
-    const validation = signUpSchema.validate({email:email,password:password});
-    if(validation.error){return res.sendStatus(400)};
-    
     try{
         const costumer = await db.collection('costumers').findOne({ email });
     
@@ -52,5 +44,4 @@ async function signIn(req, res){
 }
 
 
-
-export { signUp, signIn}
+export { signUp, signIn }
