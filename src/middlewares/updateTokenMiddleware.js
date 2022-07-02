@@ -9,12 +9,14 @@ async function updateTokenMiddleware(req,res,next){
 
         await db.collection('sessions').insertOne({ token, userId: ObjectId(costumer._id) });
 
-        const wallet = await db.collection('wallets').findOne({_id: ObjectId(costumer._id)});
+        /*
+        const wallet = await db.collection('wallets').findOne({userId: ObjectId(costumer._id)});
         if(!wallet){return res.sendStatus(401)};
 
         await db.collection('wallets').updateOne({
 
         }, { $set: {...wallet, [wallet.token]: token}})
+        */
 
         res.locals.token = token;
     } catch(erro){

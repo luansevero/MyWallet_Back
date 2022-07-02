@@ -16,9 +16,10 @@ async function signUp(req, res){
         await db.collection('costumers').insertOne({...costumer, password: passwordHash})
         console.log('Usuario cadastrado com sucesso')
 
-        const costumer = await db.collection('costumers').findOne({ email });
+        const user = await db.collection('costumers').findOne({ email });
         await db.collection('wallets').insertOne({
-            _id: ObjectId(costumer._id),
+            name: user.name,
+            userId: ObjectId(user._id),
             token: "",
             transaction:[
             ]
