@@ -1,12 +1,11 @@
 import bcrypt from 'bcrypt';
-import { v4 as uuid } from 'uuid';
-import { db, ObjectId } from '../setup/db.js';
+import { db } from '../setup/db.js';
 
 
 async function signUp(req, res){
     const costumer = req.body
     const { email } = req.body
-
+    console.log('Verificado com sucesso')
     try{
         const haveAlready = await db.collection('costumers').findOne({email});
         if(haveAlready){
@@ -15,17 +14,6 @@ async function signUp(req, res){
         const passwordHash = bcrypt.hashSync(costumer.password, 10);
         await db.collection('costumers').insertOne({...costumer, password: passwordHash})
         console.log('Usuario cadastrado com sucesso')
-
-        const user = await db.collection('costumers').findOne({ email });
-        await db.collection('wallets').insertOne({
-            name: user.name,
-            userId: ObjectId(user._id),
-            token: "",
-            transaction:[
-            ]
-        })
-        console.log('Carteira criada com sucesso')
-
         return res.sendStatus(201);
     } catch(error){
         return res.sendStatus(500);
@@ -35,8 +23,8 @@ async function signUp(req, res){
 
 async function signIn(req, res){
     const { token } = res.locals;
-
-    res.send(token)
+    console.log(`aqui está seu ${token}`)
+    res.send({token: token})
 }
 
 

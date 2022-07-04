@@ -6,8 +6,8 @@ import { getCostumerWallet, newTransition } from '../controllers/walletControlle
 
 const walletRouter = Router();
 
-walletRouter.get('/wallet', getCostumerWallet);
-walletRouter.post('/wallet/entry',transactionSchemaValidation, newTransition);
-walletRouter.post('/wallet/exit',transactionSchemaValidation, newTransition);
+walletRouter.get('/wallet', tokenValidationMiddleware, getCostumerWallet );
+walletRouter.post('/wallet/entry', tokenValidationMiddleware,transactionSchemaValidation, newTransition);
+walletRouter.post('/wallet/exit', tokenValidationMiddleware,transactionSchemaValidation, newTransition);
 
 export default walletRouter;
