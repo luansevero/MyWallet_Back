@@ -15,6 +15,7 @@ async function updateTokenMiddleware(req,res,next){
         res.locals.token = token;
         next()
     } catch(erro){
+        console.log('Eu dei erro')
         res.sendStatus(401);
     }
 }
