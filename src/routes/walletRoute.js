@@ -9,5 +9,6 @@ const walletRouter = Router();
 walletRouter.get('/wallet', tokenValidationMiddleware, getCostumerWallet );
 walletRouter.post('/wallet/entry', tokenValidationMiddleware,transactionSchemaValidation, newTransition);
 walletRouter.post('/wallet/exit', tokenValidationMiddleware,transactionSchemaValidation, newTransition);
+walletRouter.delete('/wallet', tokenValidationMiddleware)
 
 export default walletRouter;
